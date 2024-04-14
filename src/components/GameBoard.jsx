@@ -36,6 +36,7 @@ export default function GameBoard({ endTurn, turns }) {
                   onClick={() => {
                     endTurn(rowIndex, itemIndex);
                   }}
+                  disabled={item}
                 >
                   {item}
                 </button>
