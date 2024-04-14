@@ -12,6 +12,12 @@ import { WINNING_COMBINATIONS } from "./winning-combinations";
 
 // Reduce Number of States as much as possible and derive them from old ones
 
+const initialGameBoard = [
+  [null, null, null],
+  [null, null, null],
+  [null, null, null],
+];
+
 function deriveActivePlayer(gameTurns) {
   let currentPlayer = "X";
 
@@ -23,6 +29,26 @@ function App() {
   const [gameTurns, setGameTurns] = useState([]);
 
   const activePlayer = deriveActivePlayer(gameTurns);
+
+  let gameBoard = initialGameBoard;
+  for (const turn of gameTurns) {
+    const { square, player } = turn;
+    const { row, col } = square;
+
+    gameBoard[row][col] = player;
+  }
+
+  let winner;
+
+  for (const combination of WINNING_COMBINATIONS) {
+    const squareOne = gameBoard[combination[0].row][combination[0].col];
+    const squareTwo = gameBoard[combination[2].row][combination[1].col];
+    const squareThree = gameBoard[combination[2].row][combination[2].col];
+
+    if (squareOne && squareOne === squareTwo && squareOne === squareThree) {
+      winner = squareOne;
+    }
+  }
 
   function handleActivePlayer(rowIndex, itemIndex) {
     setGameTurns((prevTurns) => {
@@ -49,7 +75,8 @@ function App() {
             isActive={activePlayer === "O"}
           />
         </ol>
-        <GameBoard endTurn={handleActivePlayer} turns={gameTurns} />
+        {winner && <p>You Won, Ya {winner}</p>}
+        <GameBoard endTurn={handleActivePlayer} board={gameBoard} />
       </div>
       <Log turns={gameTurns} />
     </main>
