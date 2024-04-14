@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function Player({ initialName, symbol, isActive }) {
+export default function Player({ initialName, symbol, isActive, changeName }) {
   const [playerName, setPlayerName] = useState(initialName);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -16,6 +16,7 @@ export default function Player({ initialName, symbol, isActive }) {
             type="text"
             required
             value={playerName}
+            placeholder="Your Name"
             onChange={handleChange}
           />
         ) : (
@@ -26,6 +27,7 @@ export default function Player({ initialName, symbol, isActive }) {
       <button
         onClick={() => {
           setIsEditing((editing) => !editing);
+          if (isEditing) changeName(symbol, playerName);
         }}
       >
         {isEditing ? "Save" : "Edit"}
