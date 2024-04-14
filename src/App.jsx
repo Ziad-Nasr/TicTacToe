@@ -41,10 +41,9 @@ function App() {
   let winner;
 
   for (const combination of WINNING_COMBINATIONS) {
-    const squareOne = gameBoard[combination[0].row][combination[0].col];
-    const squareTwo = gameBoard[combination[2].row][combination[1].col];
-    const squareThree = gameBoard[combination[2].row][combination[2].col];
-
+    const squareOne = gameBoard[combination[0].row][combination[0].column];
+    const squareTwo = gameBoard[combination[1].row][combination[1].column];
+    const squareThree = gameBoard[combination[2].row][combination[2].column];
     if (squareOne && squareOne === squareTwo && squareOne === squareThree) {
       winner = squareOne;
     }
