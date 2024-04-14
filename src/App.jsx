@@ -4,6 +4,7 @@ import Player from "./components/Player";
 import GameBoard from "./components/GameBoard";
 import Log from "./components/Log";
 import { WINNING_COMBINATIONS } from "./winning-combinations";
+import GameOver from "./components/GameOver";
 
 // Immutable way to update state
 // Lifting up state
@@ -30,7 +31,7 @@ function App() {
 
   const activePlayer = deriveActivePlayer(gameTurns);
 
-  let gameBoard = initialGameBoard;
+  let gameBoard = [...initialGameBoard.map((array) => [...array])];
   for (const turn of gameTurns) {
     const { square, player } = turn;
     const { row, col } = square;
@@ -49,6 +50,8 @@ function App() {
     }
   }
 
+  const draw = gameTurns.length === 9 && !winner;
+
   function handleActivePlayer(rowIndex, itemIndex) {
     setGameTurns((prevTurns) => {
       let current = deriveActivePlayer(prevTurns);
@@ -59,6 +62,11 @@ function App() {
       return updatedTurns;
     });
   }
+
+  function handleRematch() {
+    setGameTurns([]);
+  }
+
   return (
     <main>
       <div id="game-container">
@@ -74,7 +82,9 @@ function App() {
             isActive={activePlayer === "O"}
           />
         </ol>
-        {winner && <p>You Won, Ya {winner}</p>}
+        {(winner || draw) && (
+          <GameOver winner={winner} onRematch={handleRematch} />
+        )}
         <GameBoard endTurn={handleActivePlayer} board={gameBoard} />
       </div>
       <Log turns={gameTurns} />
